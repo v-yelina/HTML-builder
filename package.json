@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "01-read-file": "./01-read-file/index.js",
     "02-write-file": "./01-write-file/index.js",
-    "03-files-in-folder": "./03-files-in-folder/index.js"
+    "03-files-in-folder": "./03-files-in-folder/index.js",
+    "04-copy-directory": "./04-copy-directory/index.js"
   },
   "author": "evgeniimal",
   "license": "ISC",
