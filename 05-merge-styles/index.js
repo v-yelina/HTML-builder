@@ -3,6 +3,11 @@ const path = require("path");
 
 const styleFolder = path.join(__dirname, "styles/");
 
+const errorHandler = (err) => {
+  console.log(err.message);
+  return;
+};
+
 const writable = fs.createWriteStream(
   path.join(__dirname, "project-dist/bundle.css")
 );
