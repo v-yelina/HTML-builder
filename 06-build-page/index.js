@@ -64,6 +64,63 @@ const mergeStyles = () => {
   });
 };
 
+const createHtml = () => {
+  const templateHtml = path.join(__dirname, "template.html");
+  const readTemplateStream = fs.createReadStream(templateHtml);
+  const writableStream = fs.createWriteStream(
+    path.join(__dirname, "project-dist/index.html"),
+    {
+      flags: "w",
+    }
+  );
+  let template = "";
+
+  readTemplateStream.on("data", function (chunk) {
+    template += chunk;
+  });
+
+  readTemplateStream.on("end", function () {
+    fs.readdir(
+      path.join(__dirname, "components"),
+      { withFileTypes: true },
+      (err, files) => {
+        if (err) errorHandler(err);
+        else {
+          try {
+            files.forEach((file) => {
+              if (file.isFile()) {
+                const fileName = `${file.name.split(".")[0]}`;
+                const fileExt = `${path.extname(file.name).slice(1)}`;
+                if (fileExt === "html") {
+                  const readable = fs.createReadStream(
+                    path.join(__dirname, `components/${file.name}`)
+                  );
+                  let component = "";
+                  readable.on("data", function (chunk) {
+                    component += chunk;
+                  });
+                  readable.on("end", function () {
+                    let startIndex = template.indexOf(fileName) - 2;
+                    template =
+                      template.slice(0, startIndex) +
+                      component +
+                      template.slice(startIndex + fileName.length + 5);
+                    if (files.indexOf(file) === files.length - 1) {
+                      writableStream.write(template);
+                    }
+                  });
+                }
+              }
+            });
+          } catch (err) {
+            errorHandler(err);
+          }
+        }
+      }
+    );
+  });
+};
+
 fs.rm(destination, { recursive: true, force: true }, (err) => {
   if (err) errorHandler(err);
 
@@ -77,4 +134,5 @@ fs.rm(destination, { recursive: true, force: true }, (err) => {
     });
   copyFile(source, path.join(destination, "assets/"));
   mergeStyles();
+  createHtml();
 });
