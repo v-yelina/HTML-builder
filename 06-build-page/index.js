@@ -104,7 +104,7 @@ const createHtml = () => {
                     template =
                       template.slice(0, startIndex) +
                       component +
-                      template.slice(startIndex + fileName.length + 5);
+                      template.slice(startIndex + fileName.length + 4);
                     if (files.indexOf(file) === files.length - 1) {
                       writableStream.write(template);
                     }
