@@ -28,7 +28,4 @@ rl.on("line", (line) => {
   writable.on("finish", () => {
     console.log(`Thank you, you can find your input in ${__dirname}/text.txt`);
   });
-  setTimeout(() => {
-    process.exit(0);
-  }, 100);
 });
